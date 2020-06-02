@@ -121,6 +121,10 @@ public class QuickUnionUF {
             if (uf.find(p) == uf.find(q)) continue;
             uf.union(p, q);
             StdOut.println(p + " " + q);
+            for (int i = 0; i < n; i++) {
+                System.out.print(uf.find(i) + "\t");
+            }
+            System.out.println();
         }
         StdOut.println(uf.count() + " components");
     }

@@ -134,6 +134,10 @@ public class WeightedQuickUnionUF {
             if (uf.find(p) == uf.find(q)) continue;
             uf.union(p, q);
             StdOut.println(p + " " + q);
+            for (int i = 0; i < n; i++) {
+                System.out.print(uf.find(i) + "\t");
+            }
+            System.out.println();
         }
         StdOut.println(uf.count() + " components");
         for (int i = 0; i < uf.parent.length; i++) {
