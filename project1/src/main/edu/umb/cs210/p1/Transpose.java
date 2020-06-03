@@ -12,6 +12,11 @@ public class Transpose {
 
         // For each 0 <= i < m and 0 <= j < n, set t[j][i]
         // to x[i][j].
+        for (int row = 0; row < x.length; row++) {
+            for (int col = 0; col < x[1].length; col++) {
+                t[col][row] = x[row][col];
+            }
+        }
 
         // Return t.
         return t;
