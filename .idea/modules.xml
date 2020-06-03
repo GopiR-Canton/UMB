@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/cs210_samplecode.iml" filepath="$PROJECT_DIR$/.idea/cs210_samplecode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lecture_1/lec_1/lec_1.iml" filepath="$PROJECT_DIR$/lecture_1/lec_1/lec_1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lecture_1/lec_1_cp/lec_1_cp.iml" filepath="$PROJECT_DIR$/lecture_1/lec_1_cp/lec_1_cp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lecture_1/lecture_1.iml" filepath="$PROJECT_DIR$/lecture_1/lecture_1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lecture_2/lecture_2.iml" filepath="$PROJECT_DIR$/lecture_2/lecture_2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lecture_3/lecture_3.iml" filepath="$PROJECT_DIR$/lecture_3/lecture_3.iml" />
+      <module fileurl="file://$PROJECT_DIR$/project1/project1.iml" filepath="$PROJECT_DIR$/project1/project1.iml" />
+    </modules>
+  </component>
+</project>

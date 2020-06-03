@@ -11,39 +11,51 @@ public class Rational {
     // denominator is 1.
     public Rational(long x) {
         // Set this.x to x and this.y to 1.
-
+        this.x = x;
+        this.y = 1;
     }
 
     // Constructs a rational number given its numerator and
     // denominator.
     public Rational(long x, long y) {
-        // Set this.x to x / gcd(x, y) and this.y to
-        // y / gcd(x, y).
-
+        // Set this.x to x / gcd(x, y)
+        // and this.y to y / gcd(x, y)
+        this.x = x / Rational.gcd(x, y);
+        this.y = y / Rational.gcd(x, y);
     }
 
     // Returns the sum of this and that rational number.
     public Rational add(Rational that) {
         // Sum of rationals a/b and c/d is the rational
         // (ad + bc) / bd.
+        try {
+            long X = (this.x * that.y) + (this.y * that.x);
+            long Y = this.y * that.y;
+            return new Rational(X, Y);
+        } catch (ArithmeticException e) {
+            return new Rational(1, 0);
+        }
 
-        return new Rational(1,0);
     }
 
     // Returns the product of this and that rational number.
     public Rational multiply(Rational that) {
         // Product of rationals a/b and c/d is the rational
         // ac / bd.
-
-        return new Rational(1,0);
+        try {
+            long X = this.x * that.x;
+            long Y = this.y * that.y;
+            return new Rational(X, Y);
+        } catch (ArithmeticException e) {
+            return new Rational(1, 0);
+        }
     }
 
     // Checks if this rational number is the same as that.
     public boolean equals(Rational that) {
         // Rationals a/b and c/d are equal iff a == c
         // and b == d.
-
-        return false;
+        return (this.x == that.x && this.y == that.y);
     }
 
     // Returns a string representation of the rational number.

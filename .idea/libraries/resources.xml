@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="resources">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/project1/src/test/resources/junit-platform-console-standalone-1.6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/project1/src/test/resources/apiguardian-api-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../algs4/out/artifacts/algs4_jar/algs4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
