@@ -10,8 +10,11 @@ public class Distance {
         // For each 0 <= i < x.length, add the square of
         // (x[i] - y[i]) to distance. At the end return
         // sqrt(distance).
+        for (int i = 0; i < x.length; i++) {
+           distance += Math.pow((x[i] - y[i]), 2);
+        }
 
-        return distance;
+        return Math.sqrt(distance);
     }
 
     // Entry point. [DO NOT EDIT]
