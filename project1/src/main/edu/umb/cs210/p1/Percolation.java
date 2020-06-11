@@ -34,38 +34,47 @@ public class Percolation {
     // Opens site (i, j) if it is not open already.
     public void open(int i, int j) {
         if (!isOpen(i, j)) {
-            // setting a site to true marks it as open
             sites[i][j].isOpen = true;
 
             // by default, set sites in the top rows as full sites
             if (i == 0) {
                 setFull(i, j);
+            } else {
+                if (i - 1 >= 0 && isFull(i - 1, j)) {
+                    setFull(i, j);
+                }
+                if (i + 1 < gridSize && isFull(i + 1, j)) {
+                    setFull(i, j);
+                }
+                if (j - 1 > 0 && isFull(i, j - 1)) {
+                    setFull(i, j);
+                }
+                if (j + 1 < gridSize && isFull(i, j + 1)) {
+                    setFull(i, j);
+                }
             }
 
             numOfOpenSites++;
         }
     }
 
-    private void setFull(int i, int j) {
-        if (sites[i][j].isOpen && !sites[i][j].isFull) {
-            sites[i][j].isFull = true;
+    // A full site is an open site that can be connected to an open site
+    // in the top row via a chain of neighboring (left, right, up, down) open sites.
+    private void setFull(int row, int col) {
+        if (isOpen(row, col) && !isFull(row, col)) {
+            sites[row][col].isFull = true;
 
-            for (int moveDown = i; moveDown < gridSize - 1; moveDown++) {
-                if (moveDown > i && sites[moveDown - 1][j].isFull && !sites[moveDown][j].isFull) {
-                    setFull(moveDown, j);
-                }
+            if (row - 1 > 0) {
+                setFull(row - 1, col);
             }
-
-            for (int moveRight = j; moveRight < gridSize - 1; moveRight++) {
-                if (moveRight > j && sites[i][moveRight].isFull && !sites[i][moveRight + 1].isFull) {
-                    setFull(i, moveRight+1);
-                }
+            if (row + 1 < gridSize) {
+                setFull(row + 1, col);
             }
-
-            for (int moveLeft = j; moveLeft > 0; moveLeft--) {
-                if (moveLeft < j && sites[i][moveLeft].isFull && !sites[i][moveLeft - 1].isFull) {
-                    setFull(i, moveLeft - 1);
-                }
+            if (col - 1 > 0) {
+                setFull(row, col - 1);
+            }
+            if (col + 1 < gridSize) {
+                setFull(row, col + 1);
             }
         }
     }
@@ -76,20 +85,8 @@ public class Percolation {
     }
 
     // Checks if site (i, j) is full.
-    public boolean isFull(int siteRow, int siteCol) {
-        // A full site is an open site that can be connected to an open site
-        // in the top row via a chain of neighboring (left, right, up, down) open sites.
-        if (siteRow == 0) {
-            return sites[siteRow][siteCol].isFull;
-        }
-
-        for (int row = siteRow; row < 0; row--) {
-            for (int col = siteCol; col < 0; col++) {
-
-            }
-        }
-
-        return sites[siteRow][siteCol].isFull;
+    public boolean isFull(int i, int j) {
+        return sites[i][j].isFull;
     }
 
     // Returns the number of open sites.
