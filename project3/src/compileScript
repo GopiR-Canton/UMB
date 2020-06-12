@@ -1,0 +1,2 @@
+export CLASSPATH="$resources/algs4.jar:$PROJECT_HOME/project3/out"
+javac -d out src/main/edu/umb/cs210/p3/$1

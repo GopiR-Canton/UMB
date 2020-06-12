@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="resources">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/test/project2/resources/junit-platform-console-standalone-1.6.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/test/project2/resources/json-simple-3.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/test/project2/resources/apiguardian-api-1.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/test/project2/resources/testingtools.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/test/project2/resources/algs4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

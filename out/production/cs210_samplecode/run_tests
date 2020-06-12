@@ -1,0 +1,120 @@
+#!/bin/bash
+
+# This script is used to run junit tests on student code.
+
+usage=$'Usage: bash run_tests (all|[Exercise[1-9]|Problem[1-9]]*)?
+  where [1-9] is an appropriate exercise or problem number.
+Examples:
+  bash run_tests                                 # to run all tests
+  bash run_tests Exercise1 Exercise4 Problem1    # to run specific tests
+  bash run_tests all                             # also runs all tests
+
+You may also use the class name.
+  bash run_tests BinaryStrings'
+
+# Set up a few variables specific to this project
+projectName="p2"
+testName="P2Test"
+exerciseCount=5
+problemCount=3
+
+declare -a files=(
+"BinaryStrings"
+"Primes"
+"MinMax"
+"Buffer"
+"Josephus"
+"LinkedDeque"
+"ResizingArrayRandomQueue"
+"Subset"
+)
+BinaryStrings="Exercise1"
+Primes="Exercise2"
+MinMax="Exercise3"
+Buffer="Exercise4"
+Josephus="Exercise5"
+LinkedDeque="Problem1"
+ResizingArrayRandomQueue="Problem2"
+Subset="Problem3"
+Exercise1="BinaryStrings"
+Exercise2="Primes"
+Exercise3="MinMax"
+Exercise4="Buffer"
+Exercise5="Josephus"
+Problem1="LinkedDeque"
+Problem2="ResizingArrayRandomQueue"
+Problem3="Subset"
+
+# Package name for the entire semester
+packageName="edu.umb.cs210"
+
+# variable that stores the previous 3 variables as a fully qualified class name
+testClass="${packageName}.${projectName}.${testName}"
+
+# variable to be used as regex to ensure proper argument input
+nameRE="(Exercise[1-${exerciseCount}]|Problem[1-${problemCount}])"
+
+# Set up the java classpath to include output files and the appropriate jars
+#basePath="$PROJECT_HOME/project${projectName:1:1}"
+basePath=.
+export CLASSPATH="$basePath/src/test/resources/algs4.jar"
+export CLASSPATH="$basePath/out:$CLASSPATH"
+export CLASSPATH="$basePath/src/test/resources/testingtools.jar:$CLASSPATH"
+export CLASSPATH="$basePath/src/test/resources/json-simple-3.1.0.jar:$CLASSPATH"
+export CLASSPATH="$basePath/src/test/resources/apiguardian-api-1.1.0.jar:$CLASSPATH"
+export CLASSPATH="$basePath/src/test/resources/junit-platform-console-standalone-1.6.0.jar:$CLASSPATH"
+
+# Make sure the test file is compiled
+javac -d out $basePath/src/test/edu/umb/cs210/p${projectName:1:1}/TestUtils.java
+javac -d out $basePath/src/test/edu/umb/cs210/p${projectName:1:1}/P2Test.java
+
+# If there's no args, or arg1 is "all", run all tests
+output=""
+if [[ $# -eq 0 || $1 =~ all ]]; then
+  echo "Compiling all files."
+  for i in "${files[@]}" ; do
+    currOutput="$(javac -d out $basePath/src/main/edu/umb/cs210/p${projectName:1:1}/$i.java)"
+    if [[ ! -z "$currOutput" ]] ; then               # if output is not empty
+      compileOutput="$compileOutput${i%.java} compile output: "$'\n'"$currOutput"
+    fi
+  done
+  echo "Running all tests. This may take several seconds."
+  currOutput="$(java org.junit.platform.console.ConsoleLauncher --exclude-engine=junit-vintage --disable-banner --select-class=${testClass})"
+  # Strip some unnecessary output (a summary with too much irrelevant info
+  currOutput="${currOutput%ms
+[*}ms"    # Yes, there's a line break there. That's intentional
+  output="$output$currOutput"
+else
+  # else, for each argument (i) in the list of arguments ($@)
+  for i in "$@"
+  do
+    # If the argument is valid (validated using regex)
+    if [[ $i =~ $nameRE ]]; then
+      currFile="$basePath/src/main/edu/umb/cs210/p${projectName:1:1}/${!i%.java}.java"
+      currClass="${testClass}\$$i"
+    elif [[ " ${files[@]} " =~ " ${i%.java} " ]]; then
+      currFile="$basePath/src/main/edu/umb/cs210/p${projectName:1:1}/${i%.java}.java"
+      currClass="${testClass}\$${!i%.java}"
+    else
+      # If it's not a valid argument, record arg for reporting at end
+      invalidArgs="Invalid argument: $i"$'\n'"$invalidArgs"
+      continue
+    fi
+    currOutput="$(javac -d out $currFile)"
+    if [[ ! -z "$currOutput" ]] ; then               # if output is not empty
+      compileOutput="$compileOutput${i%.java} compile output: "$'\n'"$currOutput"
+    fi
+    currOutput="$(java org.junit.platform.console.ConsoleLauncher --exclude-engine=junit-vintage --disable-banner --select-class=${currClass})"
+    currOutput="${currOutput%ms
+[*}ms"    # Yes, there's a line break there. That's intentional
+    output="$output$currOutput"
+  done
+fi
+echo "${compileOutput}"
+echo "${output}"
+
+# If any args were invalid, list them, then print usage
+if [[ ! -z "$invalidArgs" ]] ; then
+  echo "$invalidArgs"
+  echo "${usage}"
+fi
