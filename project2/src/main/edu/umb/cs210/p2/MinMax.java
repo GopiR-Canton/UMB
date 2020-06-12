@@ -19,7 +19,14 @@ public class MinMax {
 
         // Compare each element in linked list with min and
         // if it is smaller, update min.
+        Node nextNode = first;
 
+        while(nextNode != null){
+            if (nextNode.item < min){
+                min = nextNode.item;
+            }
+            nextNode = nextNode.next;
+        }
 
         // Return min
         return min;
@@ -32,6 +39,14 @@ public class MinMax {
         
         // Compare each element in linked list with max and
         // if it is larger, update max.
+        Node nextNode = first;
+
+        while(nextNode != null){
+            if (nextNode.item > max){
+                max = nextNode.item;
+            }
+            nextNode = nextNode.next;
+        }
 
         // Return max
         return max;
