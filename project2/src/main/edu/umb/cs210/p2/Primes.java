@@ -27,12 +27,12 @@ public class Primes implements Iterable<Integer> {
         int numPrimesReturned = 0;
         int totalPrimesNeeded = 0;
         // current prime
-        int currentNumber;
+        int p;
 
         // Construct a PrimesIterator object.
         public PrimesIterator(int totalPrimesNeeded) {
             this.totalPrimesNeeded = totalPrimesNeeded;
-            this.currentNumber = 1;
+            this.p = 1;
         }
 
         // Are there anymore primes left to be iterated?
@@ -50,15 +50,15 @@ public class Primes implements Iterable<Integer> {
             numPrimesReturned++;
 
             // As long as p is not prime, increment p by 1.
-            currentNumber++;
+            p++;
 
             // Return current value of p and increment it
             // by 1.
-            while (!isPrime(currentNumber)){
-                currentNumber++;
+            while (!isPrime(p)){
+                p++;
             }
 
-            return currentNumber;
+            return p;
         }
 
         // Remove is not supported.
