@@ -1,11 +1,8 @@
 package edu.umb.cs210.p2;
 
-
-
 import edu.princeton.cs.algs4.StdOut;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 // An immutable data type to systematically iterate over the
 // first n primes.
@@ -21,34 +18,49 @@ public class Primes implements Iterable<Integer> {
     // A PrimesIterator object.
     @Override
     public Iterator<Integer> iterator() {
-        return new PrimesIterator();
+        return new PrimesIterator(n);
     }
-    
+
     // Primes iterator.
     private class PrimesIterator implements Iterator<Integer> {
         // number of primes returned
+        int numPrimesReturned = 0;
+        int totalPrimesNeeded = 0;
         // current prime
+        int currentNumber;
 
         // Construct a PrimesIterator object.
+        public PrimesIterator(int totalPrimesNeeded) {
+            this.totalPrimesNeeded = totalPrimesNeeded;
+            this.currentNumber = 1;
+        }
 
-        
         // Are there anymore primes left to be iterated?
-        public boolean hasNext() { 
+        public boolean hasNext(){
+            if (numPrimesReturned < totalPrimesNeeded) {
+                return true;
+            }
+
             return false;
         }
 
         // The next prime.
         public Integer next() {
             // Increment count by 1.
-
+            numPrimesReturned++;
 
             // As long as p is not prime, increment p by 1.
+            currentNumber++;
 
             // Return current value of p and increment it
             // by 1.
-            return 0;
+            while (!isPrime(currentNumber)){
+                currentNumber++;
+            }
+
+            return currentNumber;
         }
-        
+
         // Remove is not supported.
         public void remove() {
             throw new UnsupportedOperationException();
