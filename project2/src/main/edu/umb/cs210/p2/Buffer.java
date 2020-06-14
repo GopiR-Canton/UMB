@@ -1,6 +1,5 @@
 package edu.umb.cs210.p2;
 
-
 import edu.princeton.cs.algs4.LinkedStack;
 import edu.princeton.cs.algs4.StdOut;
 
