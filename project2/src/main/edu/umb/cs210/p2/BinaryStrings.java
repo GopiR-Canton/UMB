@@ -4,7 +4,6 @@ package edu.umb.cs210.p2;
 import edu.princeton.cs.algs4.StdOut;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 // An immutable data type to systematically iterate over binary
 // strings of length n.
@@ -19,25 +18,42 @@ public class BinaryStrings implements Iterable<String> {
 
     // A BinaryStringsIterator object.
     public Iterator<String> iterator() {
-        return new BinaryStringsIterator();
+        return new BinaryStringsIterator(n);
     }
 
     // Binary strings iterator.
     private class BinaryStringsIterator implements Iterator<String> {
-         // number of binary strings returned
+        // number of binary strings returned
+        int numBinaryStringsReturned = 0;
+        int lengthOfBinaryString = 0;
         // current number
+        int p;
 
         // Constructor Construct a BinaryStringsIterator object.
 
+        public BinaryStringsIterator(int lengthOfBinaryString) {
+            this.lengthOfBinaryString = lengthOfBinaryString;
+            this.p = 0;
+        }
+
         // Are there anymore binary strings left to be iterated?
         public boolean hasNext() {
+            if (binary(p).length() <= lengthOfBinaryString){
+                return true;
+            }
+
             return false;
         }
 
         // The next binary string.
         public String next() {
+            numBinaryStringsReturned++;
 
-            return "";
+            String binaryValue = binary(p);
+
+            p++;
+
+            return binaryValue;
         }
 
         // Remove is not supported.
