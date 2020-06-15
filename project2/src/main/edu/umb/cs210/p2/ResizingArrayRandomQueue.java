@@ -5,24 +5,29 @@ import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 // Random queue implementation using a resizing array.
 // Using the StdRandom.uniform(0,N) for sample and
 // StdRandom.shuffle(a) for shuffling
 public class ResizingArrayRandomQueue<T> implements Iterable<T> {
     private static final String UNCHECKED = "unchecked";
-    private T[] q;
+    private T[] q = (T[]) new Object[2];
     private int N;
 
     // Construct an empty queue.
     public ResizingArrayRandomQueue() {
 //      @SuppressWarnings(UNCHECKED) // Use to suppress unchecked cast warning
-
+        N = 0;
     }
 
     // Is the queue empty?
     public boolean isEmpty() {
+        if (q.length == 0) {
+            return true;
+        }
+
         return false;
     }
 
@@ -33,38 +38,70 @@ public class ResizingArrayRandomQueue<T> implements Iterable<T> {
 
     // Add item to the queue.
     public void enqueue(T item) {
+        // If q is at full capacity, resize it to twice its current capacity
+        if (N == q.length) {
+            q = resizeFaster(q, 2);
+        }
 
+        q[N] = item;
+        N++;
+    }
+
+    private T[] resizeFaster(T[] q, int offset) {
+        T[] temp = (T[]) new Object[q.length * offset];
+        if (offset==0){
+            return temp;
+        }
+        System.arraycopy(q, 0, temp, 0, q.length);
+        return temp;
     }
 
     // Remove and return a random item from the queue.
     public T dequeue() {
-
-        return q[0];
+        //Save q[r] in item, where r is a random integer from the interval [0, N)
+        int r = StdRandom.uniform(0, N);
+        T item = q[r];
+        //Set q[r] to q[N - 1] and q[N - 1] to nul
+        q[r] = q[N-1];
+        q[N-1] = null;
+        //If q is at quarter capacity, resize it to half its current capacity
+        if (N <= q.length/4){
+            q = resizeFaster(q, N/2);
+        }
+        N--;
+        return item;
     }
 
     // Return a random item from the queue, but do not remove it.
     public T sample() {
 
-        if (isEmpty()) throw  new NoSuchElementException();
-        return q[StdRandom.uniform(0,N)];
+        if (isEmpty()) throw new NoSuchElementException();
+        return q[StdRandom.uniform(0, N)];
     }
 
     // An independent iterator over items in the queue in random order.
     @Override
-    public Iterator<T> iterator()  {
-        return new RandomQueueIterator();
+    public Iterator<T> iterator() {
+        return new RandomQueueIterator(q);
     }
 
     // An iterator, doesn't implement remove() since it's optional.
     private class RandomQueueIterator implements Iterator<T> {
+        T[] items;
+        int current;
 
-
-        RandomQueueIterator() {
+        RandomQueueIterator(T[] q) {
 //          @SuppressWarnings(UNCHECKED) // to suppress unchecked cast warning
-
+            items = (T[]) new Object[q.length];
+            System.arraycopy(q, 0, items, 0, q.length);
+            StdRandom.shuffle(items);
+            current = 0;
         }
 
         public boolean hasNext() {
+            if (current < items.length - 1){
+                return true;
+            }
             return false;
         }
 
@@ -74,7 +111,13 @@ public class ResizingArrayRandomQueue<T> implements Iterable<T> {
 
         public T next() {
             if (!hasNext()) throw new NoSuchElementException();
-            return q[0];
+
+            T item = null;
+            while(item == null) {
+                item = items[current++];
+            }
+
+            return item;
         }
     }
 

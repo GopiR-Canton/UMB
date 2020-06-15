@@ -5,6 +5,7 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 // Deque implementation using a linked list.
 public class LinkedDeque<T> implements Iterable<T> {
@@ -177,6 +178,8 @@ public class LinkedDeque<T> implements Iterable<T> {
         }
 
         public T next() {
+            if (!hasNext()) throw new NoSuchElementException();
+
             T item = currentNode.item;
             currentNode = currentNode.next;
 
