@@ -5,7 +5,6 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 // Deque implementation using a linked list.
 public class LinkedDeque<T> implements Iterable<T> {
@@ -22,12 +21,16 @@ public class LinkedDeque<T> implements Iterable<T> {
 
     // Construct an empty deque.
     public LinkedDeque() {
-
+        N = 0;
     }
 
     // Is the deque empty?
     public boolean isEmpty() {
-        return false;
+        if (N == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // The number of items on the deque.
@@ -37,36 +40,135 @@ public class LinkedDeque<T> implements Iterable<T> {
 
     // Add item to the front of the deque.
     public void addFirst(T item) {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+
+        if (first == null) {
+            first = new Node();
+            first.item = item;
+        } else {
+            if (last == null){
+                this.addLast(item);
+            }
+            else{
+                Node oldFirst = first;
+                Node newFirst = new Node();
+                newFirst.item = item;
+                newFirst.next = oldFirst;
+                oldFirst.prev = newFirst;
+                first = newFirst;
+            }
+        }
+        N++;
     }
 
     // Add item to the end of the deque.
     public void addLast(T item) {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+
+        if (first == null) {
+            this.addFirst(item);
+        } else {
+            if (last == null) {
+                last = new Node();
+                last.item = item;
+                last.prev = first;
+                first.next = last;
+            } else {
+                Node oldLast = last;
+                Node newLast = new Node();
+                newLast.item = item;
+                newLast.prev = oldLast;
+                oldLast.next = newLast;
+                last = newLast;
+            }
+        }
+        N++;
     }
 
     // Remove and return item from the front of the deque.
     public T removeFirst() {
+        if (N == 0) {
+            return null;
+        }
 
-        return first.item;
+        T item = null;
+
+        if (first != null) {
+            Node currentFirst = first;
+            item = currentFirst.item;
+
+            if (currentFirst.next == null) {
+                // first is last remaining node
+                first = null;
+            } else {
+                if (currentFirst.next != last) {
+                    // set new first
+                    first = currentFirst.next;
+                }
+            }
+        }
+
+        N--;
+
+        return item;
     }
 
     // Remove and return item from the end of the deque.
     public T removeLast() {
+        if (N == 0) {
+            return null;
+        }
 
-        return last.item;
+        T item = null;
+
+        if (last == null) {
+            if (first != null) {
+                return removeFirst();
+            }
+            else {
+                return null;
+            }
+        }
+
+        Node currentLast = last;
+        item = currentLast.item;
+
+        if (currentLast.prev == first) {
+            first.next = null;
+            last = null;
+        } else {
+            last = currentLast.prev;
+            last.next = null;
+        }
+
+        N--;
+
+        return item;
     }
 
     // An iterator over items in the queue in order from front to end.
     public Iterator<T> iterator() {
-        return new DequeIterator();
+        return new DequeIterator(first);
     }
 
     // An iterator, doesn't implement remove() since it's optional.
     private class DequeIterator implements Iterator<T> {
-
+        private Node currentNode;
 
         // DequeIterator constructor
+        public DequeIterator(Node currentNode) {
+            this.currentNode = currentNode;
+        }
 
         public boolean hasNext() {
+            if (currentNode != null) {
+                return true;
+            }
+
             return false;
         }
 
@@ -75,8 +177,10 @@ public class LinkedDeque<T> implements Iterable<T> {
         }
 
         public T next() {
+            T item = currentNode.item;
+            currentNode = currentNode.next;
 
-            return first.item;
+            return item;
         }
     }
 
