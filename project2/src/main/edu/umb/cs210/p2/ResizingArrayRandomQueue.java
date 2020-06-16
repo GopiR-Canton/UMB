@@ -58,23 +58,27 @@ public class ResizingArrayRandomQueue<T> implements Iterable<T> {
 
     // Remove and return a random item from the queue.
     public T dequeue() {
-        //Save q[r] in item, where r is a random integer from the interval [0, N)
+        if (N == 0){
+            return null;
+        }
+
         int r = StdRandom.uniform(0, N);
         T item = q[r];
-        //Set q[r] to q[N - 1] and q[N - 1] to nul
+
         q[r] = q[N-1];
         q[N-1] = null;
-        //If q is at quarter capacity, resize it to half its current capacity
+
         if (N <= q.length/4){
             q = resizeFaster(q, N/2);
         }
+
         N--;
+
         return item;
     }
 
     // Return a random item from the queue, but do not remove it.
     public T sample() {
-
         if (isEmpty()) throw new NoSuchElementException();
         return q[StdRandom.uniform(0, N)];
     }
@@ -99,7 +103,7 @@ public class ResizingArrayRandomQueue<T> implements Iterable<T> {
         }
 
         public boolean hasNext() {
-            if (current < items.length - 1){
+            if (current < items.length){
                 return true;
             }
             return false;
