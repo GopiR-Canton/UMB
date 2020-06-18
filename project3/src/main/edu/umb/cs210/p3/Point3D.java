@@ -21,7 +21,16 @@ public class Point3D implements Comparable<Point3D> {
 
     // The Euclidean distance between this point and that.
     public double distance(Point3D that) {
-        return 0.0;
+        if (that == null) {
+            return 0.0;
+        }
+
+        double x2 = that.x;
+        double y2 = that.y;
+        double z2 = that.z;
+
+        // Square root of.. the square of x - x2 plus the square of y - y2 plus the square of z - z2
+        return Math.sqrt(((x - x2) * (x - x2)) + ((y - y2) * (y - y2)) + ((z - z2) * (z - z2)));
     }
 
     // -1, 0, or 1 depending on this point's Euclidean
@@ -29,7 +38,23 @@ public class Point3D implements Comparable<Point3D> {
     // equal to, or greater than that point's Euclidean
     // distance to the origin.
     public int compareTo(Point3D that) {
-        return 1;
+        if (that == null) {
+            return 1;
+        }
+
+        Point3D origin = new Point3D(0, 0, 0);
+
+        double sourceDistanceToOrigin = distance(origin);
+        double targetDistanceToOrigin = that.distance(origin);
+
+        if (sourceDistanceToOrigin < targetDistanceToOrigin) {
+            return -1;
+        }
+        if (sourceDistanceToOrigin > targetDistanceToOrigin) {
+            return 1;
+        }
+
+        return 0;
     }
 
     // An x-coordinate comparator.
@@ -43,14 +68,19 @@ public class Point3D implements Comparable<Point3D> {
         // is less than, equal to, or greater than p2's
         // x-coordinate.
         public int compare(Point3D p1, Point3D p2) {
-             return 0;
+            if (p1.x < p2.x){
+                return -1;
+            }
+            if (p1.x > p2.x){
+                return 1;
+            }
+            return 0;
         }
     }
 
     // A y-coordinate comparator.
     public static Comparator<Point3D> yOrder() {
         return new YOrder();
-
     }
 
     // Helper y-coordinate comparator.
@@ -59,6 +89,12 @@ public class Point3D implements Comparable<Point3D> {
         // is less than, equal to, or greater than p2's
         // y-coordinate.
         public int compare(Point3D p1, Point3D p2) {
+            if (p1.y < p2.y){
+                return -1;
+            }
+            if (p1.y > p2.y){
+                return 1;
+            }
             return 0;
         }
     }
@@ -66,7 +102,6 @@ public class Point3D implements Comparable<Point3D> {
     // A z-coordinate comparator.
     public static Comparator<Point3D> zOrder() {
         return new ZOrder();
-
     }
 
     // Helper z-coordinate comparator.
@@ -75,13 +110,19 @@ public class Point3D implements Comparable<Point3D> {
         // is less than, equal to, or greater than p2's
         // z-coordinate.
         public int compare(Point3D p1, Point3D p2) {
+            if (p1.z < p2.z){
+                return -1;
+            }
+            if (p1.z > p2.z){
+                return 1;
+            }
             return 0;
         }
     }
 
     // A string representation of the point, as "(x, y, z)".
     public String toString() {
-        return " ";
+        return String.format("(%f, %f, %f)", x, y, z);
     }
 
     // Test client. [DO NOT EDIT]
