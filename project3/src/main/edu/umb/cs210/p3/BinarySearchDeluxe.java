@@ -12,17 +12,98 @@ import java.util.Comparator;
 public class BinarySearchDeluxe {
     // The index of the first key in a[] that equals the search key, 
     // or -1 if no such key.
-    public static <Key> int firstIndexOf(Key[] a, Key key, Comparator<Key> c) {
 
-        return -1;
+    public static <Key> int firstIndexOf(Key[] a, Key key, Comparator<Key> c) {
+        CheckForNull(a);
+        CheckForNull(key);
+        CheckForNull(c);
+
+        return Search(a, key, c, 0, a.length, true, -1);
+    }
+
+    static <Key> int Search(Key[] a, Key keyToFind, Comparator<Key> c,
+                            int start, int end, boolean findFirst, int prevFoundIndex) {
+        int mid = end / 2;
+        int index = -1;
+
+        if (end < 0 || mid < 0) {
+            return prevFoundIndex;
+        }
+
+        Key currentKey = a[mid];
+        int compareResult = (c.compare(currentKey, keyToFind));
+
+        switch (compareResult) {
+            case -1: // currentKey < keyToFind
+                if (prevFoundIndex == -1) {
+                    index = Search(a, keyToFind, c, mid + 1, end, findFirst, index);
+                } else {
+                    index = prevFoundIndex;
+                }
+                break;
+            case 1: // currentKey > keyToFind
+                if (prevFoundIndex == -1) {
+                    index = Search(a, keyToFind, c, start, mid - 1, findFirst, index);
+                } else {
+                    index = prevFoundIndex;
+                }
+                break;
+            default: // currentKey = keyToFind
+                index = mid;
+
+                if (findFirst) {
+                    if (index == 0) {
+                        // at first element of array; first index of key is also found
+                        return index;
+                    }
+
+                    if (index > 0) {
+                        if (a[index - 1] != keyToFind) {
+                            // previous element of array is not the key to find; so just return current index as first index of key
+                            return index;
+                        } else {
+                            // previous element of array is also the key to find; so do another check from start of array to previous element
+                            index = Search(a, keyToFind, c, start, index - 1, true, index);
+                        }
+                    }
+                }
+
+                if (!findFirst){
+                    if (index == a.length-1){
+                        // at last element of array; last index of key is also found
+                        return index;
+                    }
+
+                    if (index < a.length-1){
+                        if (a[index + 1] != keyToFind){
+                            // next element of array is not the key to find; so just return current index as last index of key
+                            return index;
+                        }
+                        else{
+                            // next element of array is also the key to find; so do another check from next element to end of array
+                            index = Search(a, keyToFind, c, index + 1, end, false, index);
+                        }
+                    }
+                }
+        }
+
+        return index;
     }
 
     // The index of the last key in a[] that equals the search key,
     // or -1 if no such key.
     public static <Key> int lastIndexOf(Key[] a, Key key, Comparator<Key> c) {
+        CheckForNull(a);
+        CheckForNull(key);
+        CheckForNull(c);
 
-        return -1;
+        return Search(a, key, c, 0, a.length, false, -1);
+    }
 
+    static void CheckForNull(Object obj) {
+        if (obj == null) {
+            throw new NullPointerException();
+        }
     }
 
     // Test client. [DO NOT EDIT]
@@ -42,7 +123,7 @@ public class BinarySearchDeluxe {
             filename = args[0];
             prefix = args[1];
         } else {
-            filename = "wiktionary.txt";
+            filename = "C:\\Users\\getgo\\IdeaProjects\\cs210_samplecode\\project3\\data\\wiktionary.txt";
             prefix = "cook";
         }
         In in = new In(filename);
@@ -60,7 +141,7 @@ public class BinarySearchDeluxe {
         int i = BinarySearchDeluxe.firstIndexOf(terms, term, prefixOrder);
         int j = BinarySearchDeluxe.lastIndexOf(terms, term, prefixOrder);
         int count = i == -1 && j == -1 ? 0 : j - i + 1;
-        StdOut.printf("Expected 3: Actualy get:%d\n",count);
+        StdOut.printf("Expected 3: Actualy get:%d\n", count);
         System.out.println(count);
 
 

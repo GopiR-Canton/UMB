@@ -15,15 +15,32 @@ public class Term implements Comparable<Term> {
 
     // Construct a term given the associated query string, having weight 0.
     public Term(String query) {
-
+        setQuery(query);
     }
 
     // Construct a term given the associated query string and weight.
     public Term(String query, long weight) {
-
+        setQuery(query);
+        setWeight(weight);
     }
 
-    // Compare this term to that in lexicographic order by query and 
+    public void setQuery(String query) {
+        if (query == null){
+            throw new NullPointerException();
+        }
+
+        this.query = query;
+    }
+
+    public void setWeight(long weight) {
+        if (weight < 0){
+            throw new IllegalArgumentException();
+        }
+
+        this.weight = weight;
+    }
+
+    // Compare this term to that in lexicographic order by query and
     // return a negative, zero, or positive integer based on whether this 
     // term is smaller, equal to, or larger than that term.
     public int compareTo(Term that) {
@@ -47,6 +64,10 @@ public class Term implements Comparable<Term> {
 
     // A prefix-order comparator.
     public static Comparator<Term> byPrefixOrder(int r) {
+        if (r < 0){
+            throw new IllegalArgumentException();
+        }
+
         return new PrefixOrder(r);
     }
 
