@@ -7,6 +7,8 @@ import edu.princeton.cs.algs4.StdOut;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import static java.lang.Math.min;
+
 // An immutable data type that represents an autocomplete term: a query string 
 // and an associated real-valued weight.
 public class Term implements Comparable<Term> {
@@ -25,7 +27,7 @@ public class Term implements Comparable<Term> {
     }
 
     public void setQuery(String query) {
-        if (query == null){
+        if (query == null) {
             throw new NullPointerException();
         }
 
@@ -33,7 +35,7 @@ public class Term implements Comparable<Term> {
     }
 
     public void setWeight(long weight) {
-        if (weight < 0){
+        if (weight < 0) {
             throw new IllegalArgumentException();
         }
 
@@ -44,11 +46,12 @@ public class Term implements Comparable<Term> {
     // return a negative, zero, or positive integer based on whether this 
     // term is smaller, equal to, or larger than that term.
     public int compareTo(Term that) {
-        return 0;
+        return this.query.compareTo(that.query);
     }
 
     // A reverse-weight comparator.
     public static Comparator<Term> byReverseWeightOrder() {
+
         return new ReverseWeightOrder();
     }
 
@@ -57,6 +60,15 @@ public class Term implements Comparable<Term> {
 
         @Override
         public int compare(Term v, Term w) {
+        /*
+            Return a -1, 0, or +1 based on whether v.weight is smaller, equal to, or larger than w.weight
+        */
+            if (v.weight < w.weight) {
+                return 1;
+            }
+            if (v.weight > w.weight) {
+                return -1;
+            }
 
             return 0;
         }
@@ -64,7 +76,7 @@ public class Term implements Comparable<Term> {
 
     // A prefix-order comparator.
     public static Comparator<Term> byPrefixOrder(int r) {
-        if (r < 0){
+        if (r < 0) {
             throw new IllegalArgumentException();
         }
 
@@ -75,22 +87,30 @@ public class Term implements Comparable<Term> {
     private static class PrefixOrder implements Comparator<Term> {
 
         private int r;
+
         // Construct a new PrefixOrder object
         PrefixOrder(int r) {
-
+            this.r = r;
         }
 
         public int compare(Term v, Term w) {
+            /*
+                Return a negative, zero, or positive integer based on whether
+                a is smaller, equal to, or larger than b,
+                where a is a substring of v of length min(r, v.query.length())
+                and b is a substring of w of length min(r, w.query.length())
+             */
+            String a = v.query.substring(0, min(r, v.query.length()));
+            String b = w.query.substring(0, min(r, w.query.length()));
 
-            return 1;
+            return a.compareTo(b);
         }
     }
 
     // A string representation of this term.
     public String toString() {
-        return "";
+        return query;
     }
-
 
 
     // Test client. [DO NOT EDIT]
@@ -98,11 +118,11 @@ public class Term implements Comparable<Term> {
 
         String filename;
         int k;
-        if (args.length!=0) {
+        if (args.length != 0) {
             filename = args[0];
             k = Integer.parseInt(args[1]);
-        }else {
-            filename="data/cities.txt";
+        } else {
+            filename = "C:\\Users\\getgo\\IdeaProjects\\cs210_samplecode\\project3\\data\\cities.txt";
             k = 5;
         }
 
