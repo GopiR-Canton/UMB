@@ -30,6 +30,7 @@ public class BinarySearchDeluxe {
             return prevFoundIndex;
         }
 
+
         Key currentKey = a[mid];
         int compareResult = (c.compare(currentKey, keyToFind));
 
