@@ -46,12 +46,11 @@ public class Term implements Comparable<Term> {
     // return a negative, zero, or positive integer based on whether this 
     // term is smaller, equal to, or larger than that term.
     public int compareTo(Term that) {
-        return this.query.compareTo(that.query);
+        return this.query.compareToIgnoreCase(that.query);
     }
 
     // A reverse-weight comparator.
     public static Comparator<Term> byReverseWeightOrder() {
-
         return new ReverseWeightOrder();
     }
 
@@ -122,7 +121,7 @@ public class Term implements Comparable<Term> {
             filename = args[0];
             k = Integer.parseInt(args[1]);
         } else {
-            filename = "C:\\Users\\getgo\\IdeaProjects\\cs210_samplecode\\project3\\data\\cities.txt";
+            filename = "data/cities.txt";
             k = 5;
         }
 

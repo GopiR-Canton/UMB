@@ -15,20 +15,30 @@ public class Autocomplete {
 
     // Initialize the data structure from the given array of terms.
     public Autocomplete(Term[] terms) {
-
+        this.terms = terms;
     }
 
     // All terms that start with the given prefix, in descending order of
     // weight.
     public Term[] allMatches(String prefix) {
+        Comparator<Term> prefixOrder = Term.byPrefixOrder(prefix.length());
+        Arrays.sort(terms, prefixOrder);
+        Term targetTerm = new Term(prefix);
+        Term[] searchTerms = new Term[terms.length];
 
+        int i = 0;
+        for (Term term: terms) {
+            if (term.toString().startsWith(prefix)) {
+                searchTerms[i++] = new Term(term.toString() + '\t');
+            }
+        }
 
-        return new Term[0];
+        return searchTerms;
     }
 
     // The number of terms that start with the given prefix.
     public int numberOfMatches(String prefix) {
-        return 1;
+        return this.allMatches(prefix).length;
     }
 
     // Entry point. [DO NOT EDIT]
