@@ -18,15 +18,16 @@ public class CertifyHeap {
         // either of its children, return false, meaning a[]
         // does not represent a maximum-ordered heap.
         // Otherwise, return true.(Shifting the starting index from 1 to 0)
+        int N = a.length;
 
-        for (int i = 0; i < a.length - 1; i++) {
-            if (i == a.length - 2){
+        for (int i = 0; i < N - 1; i++) {
+            if (i == N - 2){
                 if (a[i].compareTo(a[i+1]) < 0){
                     return false;
                 }
             }
             else {
-                if (i < a.length - 2) {
+                if (i < N - 2) {
                     if (a[i].compareTo(a[i + 1]) < 0 || a[i].compareTo(a[i + 2]) < 0) {
                         return false;
                     }
